@@ -152,11 +152,11 @@ int touch_dev_controler(int type, int unclear_id, int x, int y)
     return id;
 }
 
-int mouse_touch_id = -1;  //鼠标映射的ID 唯一 第一次产生移动事件时按下 之后只有移动  切换映射的时候才释放
-int mouse_Start_x = 720;  ///开始结束坐标
-int mouse_Start_y = 1600; //中途可能有切换 还是会回到这里的
-int screen_x = 0;
-int screen_y = 0;
+int mouse_touch_id = -1; //鼠标映射的ID 唯一 第一次产生移动事件时按下 之后只有移动  切换映射的时候才释放
+int mouse_Start_x;       ///开始结束坐标
+int mouse_Start_y;       //中途可能有切换 还是会回到这里的
+int screen_x;
+int screen_y;
 int realtive_x, realtive_y; //保存当前移动坐标
 int mouse_speedRatio = 1;
 int km_map_id[256 + 8];      //键盘鼠标code 对应分配的ID 按下获取并存入 释放的时候就从这里获取ID释放
@@ -327,7 +327,7 @@ void handelEventQueue()              //处理所有事件
         move_event_flag = true;
         realtive_x -= y * mouse_speedRatio;
         realtive_y += x * mouse_speedRatio;
-        if (mouse_touch_id == -1 || realtive_x < 32 || realtive_x > screen_x || realtive_y < 32 || realtive_y > screen_y)
+        if (mouse_touch_id == -1 || realtive_x < 32 || realtive_x > screen_x - 32 || realtive_y < 32 || realtive_y > screen_y - 32)
         {
             int rand_X = rand_offset();
             int rand_Y = rand_offset();
@@ -565,8 +565,8 @@ int main(int argc, char *argv[]) //触屏设备号 键盘设备号 鼠标设备�
     }
     mouse_Start_x = config[0][0];
     mouse_Start_y = config[0][1];
-    screen_x = mouse_Start_x * 2 - 32;
-    screen_y = (mouse_Start_y - 200) * 2 - 32;
+    screen_x = mouse_Start_x * 2;
+    screen_y = (mouse_Start_y - 200) * 2;
     mouse_speedRatio = config[0][2];
     for (int i = 0; i < 9; i++)
     {
